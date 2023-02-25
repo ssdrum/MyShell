@@ -10,7 +10,7 @@
  * Splits str on the characters specified by DELIM. Returns a NULL terminated
  * array of the substrings.
  */
-char **tokenise_str(char *str, char *delim) {
+char **split(char *str, char *delim) {
     char *cpy = strdup(str); // Avoids bus error
     char **tokens = calloc(1, sizeof(char*));
 

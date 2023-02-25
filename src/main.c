@@ -28,9 +28,7 @@ void run_shell() {
         fputs(PROMPT, stdout); // Prints prompt
         if (fgets(buf, MAX_BUFFER, stdin)) { // Takes input
             buf[strcspn(buf, "\n")] = 0; // Removes trailing newline
-            tokens = tokenise_str(buf, DELIM); // Stores tokens in NULL-terminated array
+            tokens = split(buf, DELIM); // Stores tokens in NULL-terminated array
         }
     }
 }
-
-
