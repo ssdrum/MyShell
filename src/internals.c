@@ -13,7 +13,7 @@
 *         display error message
 * */
 void change_dir(char **args, int num_tokens) {
-    char cwd[512];
+    char cwd[1024];
     int is_changed;
     char *new_dir;
 
@@ -33,4 +33,26 @@ void change_dir(char **args, int num_tokens) {
     }
 
     printf("CWD: %s\n", cwd); // Prints cwd
+}
+
+
+/*
+ * Prints all environmental variables
+ */
+void print_environ() {
+    extern char **environ;
+
+    int i = 0;
+    while (environ[i] != NULL) {
+        printf("%s\n", environ[i++]);
+    }
+}
+
+
+void echo(char **tokens) {
+    int i = 1;
+    while (tokens[i] != NULL) {
+        printf("%s ", tokens[i++]);
+    }
+    printf("\n");
 }

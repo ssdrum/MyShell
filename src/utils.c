@@ -28,7 +28,6 @@ char **split(char *str, char *delim) {
         tokens = realloc(tokens, 1 * sizeof(char*));
         tokens[0] = NULL; // Returns NULL array
     }
-
     return tokens;
 }
 
