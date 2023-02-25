@@ -31,3 +31,16 @@ char **split(char *str, char *delim) {
 
     return tokens;
 }
+
+
+/*
+ * arr: array of pointers
+ * Returns number of elements in arr
+ */
+int array_len(char **arr) {
+    int i = 0;
+    while(arr[i] != NULL) {
+        i++;
+    }
+    return i;
+}
