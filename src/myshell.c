@@ -20,9 +20,8 @@ int main(int argc, char *argv[]) {
 
 
 void run_shell() {
-    char buf[MAX_BUFFER];
+    char buf[MAX_BUFFER], cwd[MAX_BUFFER];
     char **tokens;
-    char cwd[MAX_BUFFER];
 
     getcwd(cwd, sizeof(cwd)); // Assigns absolute path of current working directory to cwd
     strcat(cwd, "/myshell");

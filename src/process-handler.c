@@ -18,16 +18,15 @@ void assign_streams(char **tokens);
 void fork_exec(char **tokens) {
     // TODO: Implement &
     pid_t pid;
+    int pid_status, last_arg;
     char **parsed_args;
-    int pid_status, exec_status, last_arg;
 
     pid = fork(); // Creates child process
     if (pid == 0) {  // Child process's id is 0
         last_arg = get_last_arg(tokens);
         parsed_args = trim_arr(tokens, last_arg);
         assign_streams(tokens); // Redirect stdin and/or stdout if necessary
-        exec_status = execvp(parsed_args[0], parsed_args); // Executes command in child process
-        if (exec_status == -1) { // execvp returns -1 if program passed is not found
+        if (execvp(parsed_args[0], parsed_args) == -1) { // Executes command in child process
             printf("command not found: %s\n", parsed_args[0]);
             exit(EXIT_FAILURE);
         }

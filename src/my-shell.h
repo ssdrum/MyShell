@@ -3,7 +3,7 @@
 
 
 char **split(char *str, char *delim);
-char *change_dir(char **args);
+void change_dir(char **args);
 int array_len(char **arr);
 void print_environ();
 void echo(char **tokens);
