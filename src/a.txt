@@ -1,7 +1,0 @@
-a.txt
-internals.c
-my-shell.h
-myshell
-myshell.c
-process-handler.c
-utils.c
