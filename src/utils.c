@@ -43,3 +43,46 @@ int array_len(char **arr) {
     }
     return i;
 }
+
+
+/**
+ * args: array of pointers
+ * num_tokens: number of tokens in args
+ * Returns the index of the last token in args that is not equal to >, < or >>.
+ * If no matching token is found, returns the number or tokens in args.
+ */
+int get_last_arg(char **args, int num_tokens) {
+    char **parsed_args;
+
+    int i = 0;
+    char *curr = args[i];
+    while (i < num_tokens - 1) {
+        if (strcmp(curr, "<") == 0 || strcmp(curr, ">") == 0 ||
+            strcmp(curr, ">>") == 0) { 
+            return i - 1;
+        }
+        curr = args[i + 1];
+        i++;
+    }
+    return i;
+}
+
+
+/**
+ * args: array of strings
+ * pos: index of args
+ * Makes a copy of arr with everything after position pos removed. Adds a NULL
+ * pointer as last entry
+ */
+char **trim_arr(char **arr, int pos) {
+    char **trimmed_arr = malloc(sizeof(char *) * pos + 1);
+    
+    int i;
+    for (i = 0; i <= pos; i++) {
+        trimmed_arr[i] = arr[i];
+    }
+
+    trimmed_arr[i + 1] = NULL;
+
+    return trimmed_arr;
+}

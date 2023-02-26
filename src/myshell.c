@@ -9,7 +9,7 @@
 void run_shell();
 
 // Constants
-char *PROMPT = "$ ";
+char *PROMPT = " $ ";
 char *DELIM = " \t"; // Use spaces and tabs as delimeters
 
 
@@ -30,6 +30,7 @@ void run_shell() {
     setenv("SHELL", cwd, 1); // Sets SHELL environment variable to this shell
 
     while(1) {
+        fputs(cwd, stdout); // Prints cwd
         fputs(PROMPT, stdout); // Prints prompt
         if (fgets(buf, MAX_BUFFER, stdin)) { // Takes input
             buf[strcspn(buf, "\n")] = 0; // Removes trailing newline
@@ -54,7 +55,7 @@ void run_shell() {
                 } else if (strcmp(tokens[0], "pause") == 0) {
                     printf("TODO\n");
                 } else if (strcmp(tokens[0], "quit") == 0) {
-                    exit(0);
+                    exit(EXIT_SUCCESS);
                 } else {
                     fork_exec(tokens, num_tokens); // Handles other commands creating child processes
                 }
