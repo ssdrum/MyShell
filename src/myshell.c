@@ -39,18 +39,18 @@ void run_shell() {
             // Internal commands
             if (tokens[0] != NULL) { // Checks for empty input line
                 if (strcmp(tokens[0], "cd") == 0) {
-                    change_dir(tokens);
+                    cd_in(tokens);
                 } else if (strcmp(tokens[0], "clr") == 0)  {
                     system("clear");
                 } else if (strcmp(tokens[0], "dir") == 0)  {
                     system("ls -al");
                 } else if (strcmp(tokens[0], "environ") == 0) {
-                    print_environ();
+                    environ_in();
                 } else if (strcmp(tokens[0], "echo") == 0) {
-                    echo(tokens);
-                } else if (strcmp(tokens[0], "help") == 0) {
-                    printf("TODO\n");
+                    echo_in(tokens);
                 } else if (strcmp(tokens[0], "pause") == 0) {
+                    pause_in();
+                } else if (strcmp(tokens[0], "help") == 0) {
                     printf("TODO\n");
                 } else if (strcmp(tokens[0], "quit") == 0) {
                     exit(EXIT_SUCCESS);

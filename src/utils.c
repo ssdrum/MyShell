@@ -6,7 +6,8 @@
 
 
 /*
- * char *str: a string
+ * char *str: string
+ * char *delim: string
  * Splits str on the characters specified by DELIM. Returns a NULL terminated
  * array of the substrings.
  */
@@ -33,7 +34,7 @@ char **split(char *str, char *delim) {
 
 
 /*
- * arr: array of pointers
+ * arr: NULL terminated array
  * Returns number of elements in arr
  */
 int array_len(char **arr) {

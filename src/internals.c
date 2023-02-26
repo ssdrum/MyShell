@@ -9,7 +9,7 @@
 void assign_out_stream(char **tokens);
 
 
-void change_dir(char **args) {
+void cd_in(char **args) {
     char cwd[MAX_BUFFER], nwd[MAX_BUFFER]; // Current and new working directory
     int is_changed;
     int num_tokens;
@@ -33,7 +33,7 @@ void change_dir(char **args) {
 /*
  * Prints all environmental variables
  */
-void print_environ() {
+void environ_in() {
     extern char **environ;
     int i = 0;
     while (environ[i] != NULL) {
@@ -45,7 +45,7 @@ void print_environ() {
 /*
  * Implementation of echo commmand
  */
-void echo(char **tokens) {
+void echo_in(char **tokens) {
     int i = 1;
     while (tokens[i] != NULL) {
         printf("%s ", tokens[i++]);
@@ -55,8 +55,18 @@ void echo(char **tokens) {
 
 
 /*
- * TODO
+ * Pauses shell until enter is pressed
  */
+void pause_in() {
+    char c;
+
+    while(c != '\n') {
+        c = fgetc(stdin);
+    }
+}
+
+/*
+ * TODO
 void assign_out_stream(char **tokens) {
     int i;
     for (i = 0; tokens[i] != NULL; i++) {
@@ -67,3 +77,4 @@ void assign_out_stream(char **tokens) {
         }
     }
 }
+*/
