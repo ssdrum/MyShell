@@ -6,7 +6,7 @@
 
 
 // Prototypes
-void assign_streams(char **tokens, int num_tokens);
+void assign_streams(char **tokens);
 
 
 /*
@@ -15,7 +15,7 @@ void assign_streams(char **tokens, int num_tokens);
  * Handles forking and execution of non-internal commands. Creates a child
  * process which executes the command passed in tokens[0].
  */
-void fork_exec(char **tokens, int num_tokens) {
+void fork_exec(char **tokens) {
     // TODO: Implement &
     pid_t pid;
     char **parsed_args;
@@ -23,9 +23,9 @@ void fork_exec(char **tokens, int num_tokens) {
 
     pid = fork(); // Creates child process
     if (pid == 0) {  // Child process's id is 0
-        last_arg = get_last_arg(tokens, num_tokens);
+        last_arg = get_last_arg(tokens);
         parsed_args = trim_arr(tokens, last_arg);
-        assign_streams(tokens, num_tokens); // Redirect stdin and/or stdout if necessary
+        assign_streams(tokens); // Redirect stdin and/or stdout if necessary
         exec_status = execvp(parsed_args[0], parsed_args); // Executes command in child process
         if (exec_status == -1) { // execvp returns -1 if program passed is not found
             printf("command not found: %s\n", parsed_args[0]);
@@ -43,9 +43,9 @@ void fork_exec(char **tokens, int num_tokens) {
 /**
  * Redirects stdin and stdout if necessary
  */
-void assign_streams(char **tokens, int num_tokens) {
+void assign_streams(char **tokens) {
     int i;
-    for (i = 0; i < num_tokens; i++) {
+    for (i = 0; tokens[i] != NULL; i++) {
         if (strcmp(tokens[i], "<") == 0) {
             freopen(tokens[i + 1], "r", stdin);
         } else if (strcmp(tokens[i], ">") == 0) {

@@ -47,24 +47,16 @@ int array_len(char **arr) {
 
 /**
  * args: array of pointers
- * num_tokens: number of tokens in args
  * Returns the index of the last token in args that is not equal to >, < or >>.
  * If no matching token is found, returns the number or tokens in args.
  */
-int get_last_arg(char **args, int num_tokens) {
-    char **parsed_args;
-
+int get_last_arg(char **args) {
     int i = 0;
-    char *curr = args[i];
-    while (i < num_tokens - 1) {
-        if (strcmp(curr, "<") == 0 || strcmp(curr, ">") == 0 ||
-            strcmp(curr, ">>") == 0) { 
-            return i - 1;
-        }
-        curr = args[i + 1];
+    while (args[i] != NULL && strcmp(args[i], "<") != 0 && 
+            strcmp(args[i], ">") != 0 && strcmp(args[i], ">>") != 0) { 
         i++;
     }
-    return i;
+    return i - 1;
 }
 
 
@@ -74,15 +66,13 @@ int get_last_arg(char **args, int num_tokens) {
  * Makes a copy of arr with everything after position pos removed. Adds a NULL
  * pointer as last entry
  */
-char **trim_arr(char **arr, int pos) {
-    char **trimmed_arr = malloc(sizeof(char *) * pos + 1);
+char **trim_arr(char **arr, int end) {
+    char **trimmed_arr = malloc(sizeof(char *) * end + 1);
     
     int i;
-    for (i = 0; i <= pos; i++) {
+    for (i = 0; i <= end; i++) {
         trimmed_arr[i] = arr[i];
     }
-
     trimmed_arr[i + 1] = NULL;
-
     return trimmed_arr;
 }

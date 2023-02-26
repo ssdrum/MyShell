@@ -20,28 +20,27 @@ int main(int argc, char *argv[]) {
 
 
 void run_shell() {
-    char buf[MAX_BUFFER]; // 1024
+    char buf[MAX_BUFFER];
     char **tokens;
-    int num_tokens;
-    char cwd[1024];
+    char cwd[MAX_BUFFER];
 
     getcwd(cwd, sizeof(cwd)); // Assigns absolute path of current working directory to cwd
     strcat(cwd, "/myshell");
     setenv("SHELL", cwd, 1); // Sets SHELL environment variable to this shell
 
     while(1) {
+        getcwd(cwd, sizeof(cwd)); 
         fputs(cwd, stdout); // Prints cwd
         fputs(PROMPT, stdout); // Prints prompt
         if (fgets(buf, MAX_BUFFER, stdin)) { // Takes input
             buf[strcspn(buf, "\n")] = 0; // Removes trailing newline
             tokens = split(buf, DELIM); // Stores tokens in NULL-terminated array
-            num_tokens = array_len(tokens);
 
             // TODOS: pause, help
             // Internal commands
             if (tokens[0] != NULL) { // Checks for empty input line
                 if (strcmp(tokens[0], "cd") == 0) {
-                    change_dir(tokens, num_tokens);
+                    change_dir(tokens);
                 } else if (strcmp(tokens[0], "clr") == 0)  {
                     system("clear");
                 } else if (strcmp(tokens[0], "dir") == 0)  {
@@ -57,9 +56,10 @@ void run_shell() {
                 } else if (strcmp(tokens[0], "quit") == 0) {
                     exit(EXIT_SUCCESS);
                 } else {
-                    fork_exec(tokens, num_tokens); // Handles other commands creating child processes
+                    fork_exec(tokens); // Handles other commands creating child processes
                 }
             }
+            free(tokens);
         }
     }
 }
