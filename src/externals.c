@@ -2,7 +2,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include "my-shell.h"
+#include "myshell.h"
 
 
 // Prototypes

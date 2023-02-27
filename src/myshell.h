@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 #define MAX_BUFFER 1024
 #define MAX_ARGS 64
 
@@ -6,8 +8,9 @@
 void cd_in(char **args);
 void environ_in();
 void pause_in();
+void dir_in();
 void echo_in(char **tokens);
-void assign_out_stream(char **tokens);
+void handle_out_redirect(void (*f)(char**), char **args);
 
 // Utils
 int array_len(char **arr);

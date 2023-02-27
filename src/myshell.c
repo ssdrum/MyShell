@@ -2,7 +2,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
-#include "my-shell.h"
+#include "myshell.h"
 
 
 // Prototypes
@@ -25,7 +25,7 @@ void run_shell() {
 
     getcwd(cwd, sizeof(cwd)); // Assigns absolute path of current working directory to cwd
     strcat(cwd, "/myshell");
-    setenv("SHELL", cwd, 1); // Sets SHELL environment variable to this shell
+    setenv("SHELL", cwd, 1); // TODO Sets SHELL environment variable to this shell To fix
 
     while(1) {
         getcwd(cwd, sizeof(cwd)); 
@@ -43,11 +43,11 @@ void run_shell() {
                 } else if (strcmp(tokens[0], "clr") == 0)  {
                     system("clear");
                 } else if (strcmp(tokens[0], "dir") == 0)  {
-                    system("ls -al");
+                    handle_out_redirect(dir_in, tokens);
                 } else if (strcmp(tokens[0], "environ") == 0) {
-                    environ_in();
+                    handle_out_redirect(environ_in, tokens);
                 } else if (strcmp(tokens[0], "echo") == 0) {
-                    echo_in(tokens);
+                    handle_out_redirect(echo_in, tokens);
                 } else if (strcmp(tokens[0], "pause") == 0) {
                     pause_in();
                 } else if (strcmp(tokens[0], "help") == 0) {
@@ -55,7 +55,7 @@ void run_shell() {
                 } else if (strcmp(tokens[0], "quit") == 0) {
                     exit(EXIT_SUCCESS);
                 } else {
-                    fork_exec(tokens); // Handles other commands creating child processes
+                    fork_exec(tokens); // Handles external commands creating child processes
                 }
             }
             free(tokens);
