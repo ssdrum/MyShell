@@ -39,23 +39,23 @@ void run_shell() {
             // Internal commands
             if (tokens[0] != NULL) { // Checks for empty input line
                 if (strcmp(tokens[0], "cd") == 0) {
-                    cd_in(tokens);
+                    handle_int_cmd(cd_in, tokens);
                 } else if (strcmp(tokens[0], "clr") == 0)  {
-                    system("clear");
+                    handle_int_cmd(clr_in, tokens);
                 } else if (strcmp(tokens[0], "dir") == 0)  {
-                    handle_out_redirect(dir_in, tokens);
+                    handle_int_cmd(dir_in, tokens);
                 } else if (strcmp(tokens[0], "environ") == 0) {
-                    handle_out_redirect(environ_in, tokens);
+                    handle_int_cmd(environ_in, tokens);
                 } else if (strcmp(tokens[0], "echo") == 0) {
-                    handle_out_redirect(echo_in, tokens);
+                    handle_int_cmd(echo_in, tokens);
                 } else if (strcmp(tokens[0], "pause") == 0) {
-                    pause_in();
+                    handle_int_cmd(pause_in, tokens);
                 } else if (strcmp(tokens[0], "help") == 0) {
                     printf("TODO\n");
                 } else if (strcmp(tokens[0], "quit") == 0) {
                     exit(EXIT_SUCCESS);
                 } else {
-                    fork_exec(tokens); // Handles external commands creating child processes
+                    handle_ext_cmd(tokens); // Handles external commands creating child processes
                 }
             }
             free(tokens);

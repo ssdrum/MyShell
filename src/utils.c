@@ -74,6 +74,6 @@ char **trim_arr(char **arr, int end) {
     for (i = 0; i <= end; i++) {
         trimmed_arr[i] = arr[i];
     }
-    trimmed_arr[i + 1] = NULL;
+    trimmed_arr[i] = NULL;
     return trimmed_arr;
 }

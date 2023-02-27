@@ -9,8 +9,9 @@ void cd_in(char **args);
 void environ_in();
 void pause_in();
 void dir_in();
+void clr_in();
 void echo_in(char **tokens);
-void handle_out_redirect(void (*f)(char**), char **args);
+void handle_int_cmd(void (*f)(char**), char **args);
 
 // Utils
 int array_len(char **arr);
@@ -19,5 +20,4 @@ char **trim_arr(char **arr, int end);
 char **split(char *str, char *delim);
 
 // Fork/exec handling
-void fork_exec(char **tokens);
-void assign_streams(char **tokens);
+void handle_ext_cmd(char **tokens);

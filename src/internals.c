@@ -36,7 +36,7 @@ void restore_stdout(int saved_stdout) {
  * Redirects stdout if > or >> is in tokens. Calls the function passed as
  * command. Lastly, restores stdout to default stream.
  */
-void handle_out_redirect(void (*command)(char**), char **tokens) {
+void handle_int_cmd(void (*command)(char**), char **tokens) {
     char **trimmed_tokens;
     int saved_stdout;
 
@@ -127,4 +127,9 @@ void pause_in() {
  */
 void dir_in() {
     system("ls -al");
+}
+
+
+void clr_in() {
+    system("clear");
 }
