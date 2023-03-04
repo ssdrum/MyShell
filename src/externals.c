@@ -2,11 +2,11 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <string.h>
-#include <errno.h>
 #include "myshell.h"
 
 
 /**
+ * char **tokens: Array strings
  * Redirects stdin and stdout if necessary
  */
 void assign_streams(char **tokens) {

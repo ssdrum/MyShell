@@ -3,11 +3,12 @@
 #include <sys/fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <fcntl.h>
 #include "myshell.h"
 
 
 /*
+ * char *filename: name of the file to open
+ * int append: flag that triggers append mode
  * redirects stdout to the file specified by filename. If append is 0,
  * redirects in write mode. If append is 1, redirects in append mode.
  */
@@ -24,6 +25,7 @@ int redirect_stdout(char *filename, int append) {
 
 
 /*
+ * int saved_stdout: file descriptor for original stdout
  * Restores stdout
  */
 void restore_stdout(int saved_stdout) {
@@ -33,6 +35,8 @@ void restore_stdout(int saved_stdout) {
 
 
 /*
+ * (*command)(char**): pointer to an internal command function
+ * char **tokens: array of tokens
  * Redirects stdout if > or >> is in tokens. Calls the function passed as
  * command. Lastly, restores stdout to default stream.
  */
@@ -51,7 +55,7 @@ void handle_int_cmd(void (*command)(char**), char **tokens) {
             return;
         } else if (strcmp(tokens[i], ">>") == 0) {
             trimmed_tokens = trim_arr(tokens, i - 1); // Removes all tokens after and including >>
-            saved_stdout = redirect_stdout(tokens[i + 1], 1); // Redirects stdout in write mode
+            saved_stdout = redirect_stdout(tokens[i + 1], 1); // Redirects stdout in append mode
             (*command)(trimmed_tokens); // Executes command
             restore_stdout(saved_stdout); // Restores stdout
             free(trimmed_tokens);
@@ -64,6 +68,7 @@ void handle_int_cmd(void (*command)(char**), char **tokens) {
 
 
 /*
+ * char **tokens: array of tokens
  * Changes directory. Sets environment variable PWD accordingly.
  */
 void cd_in(char **args) {
@@ -94,20 +99,21 @@ void environ_in() {
     extern char **environ;
     int i = 0;
     while (environ[i] != NULL) {
-        printf("%s\n", environ[i++]);
+        fprintf(stdout, "%s\n", environ[i++]);
     }
 }
 
 
 /*
+ * char **tokens: array of tokens
  * Implementation of echo commmand. Substitutes multiple spaces or tabs with a single space.
  */
 void echo_in(char **tokens) {
     int i = 1;
     while (tokens[i] != NULL) {
-        printf("%s ", tokens[i++]);
+        fprintf(stdout, "%s ", tokens[i++]);
     }
-    printf("\n");
+    fprintf(stdout, "\n");
 }
 
 
@@ -130,6 +136,9 @@ void dir_in() {
 }
 
 
+/*
+ * Just calls clear
+ */
 void clr_in() {
     system("clear");
 }
