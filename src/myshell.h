@@ -2,16 +2,12 @@
 #define MAX_ARGS 64
 #define PROMPT "$"
 
-// Commands
 
 // Internal commands
-void cd_in(char **args);
-void environ_in();
-void pause_in();
-void dir_in();
-void clr_in();
-void echo_in(char **tokens);
-void handle_intern_cmd(void (*f)(char**), char **args);
+extern char *internal_commands[];
+extern void (*internal_function[])(char **args);
+
+void handle_intern_cmd(void (*command)(char**), char **tokens);
 
 // Utils
 int array_len(char **arr);

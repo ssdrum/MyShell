@@ -11,85 +11,110 @@ char *DELIM = " \t"; // Use spaces and tabs as delimeters
 
 // Prototypes
 void run_shell(FILE *batch_file);
+FILE *set_input_stream(FILE *batch_file);
 
 
+/*
+ * Main function. Calls run_shell passing the batch file to it as argument
+ */
 int main(int argc, char *argv[]) {
     FILE *batch_file = NULL;
 
     if (argc == 2) {
         batch_file = fopen(argv[1], "r");
-        if (batch_file == NULL) { // Batch file does not exist
+        // Batch file does not exist
+        if (batch_file == NULL) {
             fprintf(stdout, "cannot open %s\n", argv[1]);
+            exit(EXIT_FAILURE);
         } 
     }
-
     run_shell(batch_file);
-
     return 0;
 }
 
 
+/*
+ * FILE *batch_file: File pointer to a batch file
+ * Assigns environment variables, takes input, handles internals and external
+ * commands.
+ */
 void run_shell(FILE *batch_file) {
     char buf[MAX_BUFFER], cwd[MAX_BUFFER];
     char **tokens;
-    int bg_mode;
+    int background_mode, num_internal_commands;
     FILE *input_stream;
 
-    // Iput stream is stdin if batchfile is not provided, otherwise is batchfile
-    if (batch_file == NULL) {
-        input_stream = stdin;
-    } else {
-        input_stream = batch_file;
-    }
+    // Input stream is stdin if batchfile is not provided, otherwise is batchfile
+    num_internal_commands = array_len(internal_commands);
+    input_stream = set_input_stream(batch_file);
 
-    getcwd(cwd, sizeof(cwd)); // Assigns absolute path of current working directory to cwd
+    // Assigns absolute path of current working directory to cwd
+    getcwd(cwd, sizeof(cwd));
     strcat(cwd, "/myshell");
-    setenv("SHELL", cwd, 1); // TODO Sets SHELL environment variable to this shell To fix
+    setenv("SHELL", cwd, 1);
 
+    // Main loop that takes input
     while(!feof(input_stream)) {
+        // 0 for false, 1 for true. Default is false
+        background_mode = 0;
         getcwd(cwd, sizeof(cwd)); 
-        if (batch_file == NULL) {
-            fprintf(stdout, "%s ", cwd); // Prints current working directory
-            fprintf(stdout, "%s ", PROMPT); // Prints prompt
-        }
-        bg_mode = 0;
 
-        if (fgets(buf, MAX_BUFFER, input_stream)) { // Takes input
+        // Prints current working directory and prompt
+        if (batch_file == NULL) {
+            fprintf(stdout, "%s %s ", cwd, PROMPT);
+        }
+
+        // Takes input
+        if (fgets(buf, MAX_BUFFER, input_stream)) {
+            // Prints input if coming from a batch file
             if (batch_file != NULL) {
                 fputs(buf, stdout);
             }
-            buf[strcspn(buf, "\n")] = 0; // Removes trailing newline
-            tokens = split(buf, DELIM); // Stores tokens in NULL-terminated array
 
-            // TODOS: help
+            // Removes trailing newline
+            buf[strcspn(buf, "\n")] = 0;
+            // Stores tokens in NULL-terminated array
+            tokens = split(buf, DELIM);
+
             // Internal commands
-            if (tokens[0] != NULL) { // Checks for empty input line
-                                     //
-                if (strcmp(tokens[array_len(tokens) - 1], "&") == 0) { // Flips backgroud execution flag if last token is &
-                    bg_mode = 1;
+            if (tokens[0] != NULL) {
+                // Flips backgroud execution flag if last token is &
+                if (strcmp(tokens[array_len(tokens) - 1], "&") == 0) {
+                    background_mode = 1;
                 }
 
-                if (strcmp(tokens[0], "cd") == 0) {
-                    handle_intern_cmd(cd_in, tokens);
-                } else if (strcmp(tokens[0], "clr") == 0)  {
-                    handle_intern_cmd(clr_in, tokens);
-                } else if (strcmp(tokens[0], "dir") == 0)  {
-                    handle_intern_cmd(dir_in, tokens);
-                } else if (strcmp(tokens[0], "environ") == 0) {
-                    handle_intern_cmd(environ_in, tokens);
-                } else if (strcmp(tokens[0], "echo") == 0) {
-                    handle_intern_cmd(echo_in, tokens);
-                } else if (strcmp(tokens[0], "pause") == 0) {
-                    handle_intern_cmd(pause_in, tokens);
-                } else if (strcmp(tokens[0], "help") == 0) {
-                    printf("TODO\n");
-                } else if (strcmp(tokens[0], "quit") == 0) {
-                    exit(EXIT_SUCCESS);
+                // Check if command is an internal command
+                int i = 0;
+                while (i < num_internal_commands &&
+                       strcmp(tokens[0], internal_commands[i]) != 0) {
+                    i++;
+                }
+
+                // Executes command
+                if (i == num_internal_commands) {
+                    handle_ext_cmd(tokens, background_mode);
                 } else {
-                    handle_ext_cmd(tokens, bg_mode); // Handles external commands creating child processes
+                    handle_intern_cmd(internal_function[i], tokens);
                 }
             }
             free(tokens);
         }
     }
+}
+
+
+/*
+ * FILE *batch_file: File pointer to a batch file
+ * Assigns input stream. If no batch file is provided, assigns input stream to
+ * stdin.
+ */
+FILE *set_input_stream(FILE *batch_file) {
+    FILE *input_stream;
+
+    if (batch_file == NULL) {
+        input_stream = stdin;
+    } else {
+        input_stream = batch_file;
+    }
+    return input_stream;
 }

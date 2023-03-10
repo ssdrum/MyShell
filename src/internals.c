@@ -6,6 +6,8 @@
 #include "myshell.h"
 
 
+
+
 /*
  * char *filename: name of the file to open
  * int append: flag that triggers append mode
@@ -13,12 +15,15 @@
  * redirects in write mode. If append is 1, redirects in append mode.
  */
 int redirect_stdout(char *filename, int append) {
-    int fd = open(filename, O_CREAT | O_WRONLY | (append ? O_APPEND : 0), 0666); // Tries to open file filename
+    int fd = open(filename, O_CREAT | O_WRONLY | (append ? O_APPEND : 0), 0666);
     if (fd < 0) {
+        // Error
         fprintf(stdout, "cannot open file: %s", filename);
     }
-    int new_out = dup(1); // Allocates new file descriptor that refers to new stdout
-    dup2(fd, 1); // Reassigns stdout to fd
+    // Allocates new file descriptor that refers to new stdout
+    int new_out = dup(1);
+    // Reassigns stdout to fd
+    dup2(fd, 1);
     close(fd);
     return new_out;
 }
@@ -47,23 +52,28 @@ void handle_intern_cmd(void (*command)(char**), char **tokens) {
     int i;
     for (i = 0; tokens[i] != NULL; i++) {
         if (strcmp(tokens[i], ">") == 0) {
-            trimmed_tokens = trim_arr(tokens, i - 1); // Removes all tokens after and including >
-            saved_stdout = redirect_stdout(tokens[i + 1], 0); // Redirects stdout in write mode
-            (*command)(trimmed_tokens); // Executes command
-            restore_stdout(saved_stdout); // Restores stdout
+            // Removes all tokens after and including >
+            trimmed_tokens = trim_arr(tokens, i - 1);
+            // Redirects stdout in write mode
+            saved_stdout = redirect_stdout(tokens[i + 1], 0);
+            // Executes command
+            (*command)(trimmed_tokens);
+            // Restores stdout
+            restore_stdout(saved_stdout);
             free(trimmed_tokens);
             return;
         } else if (strcmp(tokens[i], ">>") == 0) {
-            trimmed_tokens = trim_arr(tokens, i - 1); // Removes all tokens after and including >>
-            saved_stdout = redirect_stdout(tokens[i + 1], 1); // Redirects stdout in append mode
-            (*command)(trimmed_tokens); // Executes command
-            restore_stdout(saved_stdout); // Restores stdout
+            trimmed_tokens = trim_arr(tokens, i - 1);
+            // Redirects stdout in append mode
+            saved_stdout = redirect_stdout(tokens[i + 1], 1);
+            (*command)(trimmed_tokens);
+            restore_stdout(saved_stdout);
             free(trimmed_tokens);
             return;
         }
     }
-
-    (*command)(tokens); // No output redirection
+    // No output redirection
+    (*command)(tokens);
 }
 
 
@@ -71,7 +81,7 @@ void handle_intern_cmd(void (*command)(char**), char **tokens) {
  * char **tokens: array of tokens
  * Changes directory. Sets environment variable PWD accordingly.
  */
-void cd_in(char **args) {
+void internal_cd(char **args) {
     char cwd[MAX_BUFFER], nwd[MAX_BUFFER]; // Current and new working directory
     int is_changed;
     int num_tokens;
@@ -95,7 +105,7 @@ void cd_in(char **args) {
 /*
  * Prints all environmental variables
  */
-void environ_in() {
+void internal_environ() {
     extern char **environ;
     int i = 0;
     while (environ[i] != NULL) {
@@ -108,7 +118,7 @@ void environ_in() {
  * char **tokens: array of tokens
  * Implementation of echo commmand. Substitutes multiple spaces or tabs with a single space.
  */
-void echo_in(char **tokens) {
+void internal_echo(char **tokens) {
     int i = 1;
     while (tokens[i] != NULL) {
         fprintf(stdout, "%s ", tokens[i++]);
@@ -120,7 +130,7 @@ void echo_in(char **tokens) {
 /*
  * Pauses shell until enter is pressed
  */
-void pause_in() {
+void internal_pause() {
     char c;
     while(c != '\n') {
         c = fgetc(stdin);
@@ -129,16 +139,62 @@ void pause_in() {
 
 
 /*
- * Just calls ls -al
+ * Calls ls -al
  */
-void dir_in() {
+void internal_dir() {
     system("ls -al");
 }
 
 
 /*
- * Just calls clear
+ * Calls clear
  */
-void clr_in() {
+void internal_clr() {
     system("clear");
 }
+
+
+/*
+ * Opens manual
+ */
+void internal_help() {
+    printf("TODO\n");
+}
+
+
+/*
+ * Exits shell
+ */
+void internal_quit() {
+    exit(EXIT_SUCCESS);
+}
+
+
+// Array of all internal commands names
+// Note that the order of internal_commands must match the order in
+// internal_funciton
+char *internal_commands[] = {
+    "cd",
+    "clr",
+    "dir",
+    "environ",
+    "echo",
+    "pause",
+    "help",
+    "quit",
+    NULL
+};
+
+
+// Array of pointers to internal commands functions
+void (*internal_function[])(char **args) = {
+    &internal_cd,
+    &internal_clr,
+    &internal_dir,
+    &internal_environ,
+    &internal_echo,
+    &internal_pause,
+    &internal_help,
+    &internal_quit,
+    NULL
+};
