@@ -17,7 +17,7 @@ int redirect_stdout(char *filename, int append) {
     if (fd < 0) {
         fprintf(stdout, "cannot open file: %s", filename);
     }
-    int new_out = dup(1); // Allocates new file descriptor that refers to stdout
+    int new_out = dup(1); // Allocates new file descriptor that refers to new stdout
     dup2(fd, 1); // Reassigns stdout to fd
     close(fd);
     return new_out;
@@ -25,7 +25,7 @@ int redirect_stdout(char *filename, int append) {
 
 
 /*
- * int saved_stdout: file descriptor for original stdout
+ * int saved_stdout: file descriptor for new stdout
  * Restores stdout
  */
 void restore_stdout(int saved_stdout) {
@@ -40,7 +40,7 @@ void restore_stdout(int saved_stdout) {
  * Redirects stdout if > or >> is in tokens. Calls the function passed as
  * command. Lastly, restores stdout to default stream.
  */
-void handle_int_cmd(void (*command)(char**), char **tokens) {
+void handle_intern_cmd(void (*command)(char**), char **tokens) {
     char **trimmed_tokens;
     int saved_stdout;
 

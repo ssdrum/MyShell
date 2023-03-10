@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <unistd.h>
 #include "myshell.h"
 
 
@@ -54,7 +53,8 @@ int array_len(char **arr) {
 int get_last_arg(char **args) {
     int i = 0;
     while (args[i] != NULL && strcmp(args[i], "<") != 0 && 
-            strcmp(args[i], ">") != 0 && strcmp(args[i], ">>") != 0) { 
+            strcmp(args[i], ">") != 0 && strcmp(args[i], ">>") != 0 &&
+            strcmp(args[i], "&") != 0) { 
         i++;
     }
     return i - 1;
