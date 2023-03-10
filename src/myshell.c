@@ -33,12 +33,20 @@ void run_shell(FILE *batch_file) {
     char buf[MAX_BUFFER], cwd[MAX_BUFFER];
     char **tokens;
     int bg_mode;
+    FILE *input_stream;
+
+    // Iput stream is stdin if batchfile is not provided, otherwise is batchfile
+    if (batch_file == NULL) {
+        input_stream = stdin;
+    } else {
+        input_stream = batch_file;
+    }
 
     getcwd(cwd, sizeof(cwd)); // Assigns absolute path of current working directory to cwd
     strcat(cwd, "/myshell");
     setenv("SHELL", cwd, 1); // TODO Sets SHELL environment variable to this shell To fix
 
-    while(!feof(stdin)) {
+    while(!feof(input_stream)) {
         getcwd(cwd, sizeof(cwd)); 
         if (batch_file == NULL) {
             fprintf(stdout, "%s ", cwd); // Prints current working directory
@@ -46,7 +54,10 @@ void run_shell(FILE *batch_file) {
         }
         bg_mode = 0;
 
-        if (fgets(buf, MAX_BUFFER, batch_file == NULL ? stdin : batch_file)) { // Takes input
+        if (fgets(buf, MAX_BUFFER, input_stream)) { // Takes input
+            if (batch_file != NULL) {
+                fputs(buf, stdout);
+            }
             buf[strcspn(buf, "\n")] = 0; // Removes trailing newline
             tokens = split(buf, DELIM); // Stores tokens in NULL-terminated array
 

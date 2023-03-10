@@ -1,1 +1,1 @@
-echo hello
+environ > out.txt
