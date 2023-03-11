@@ -13,6 +13,7 @@ char *DELIM = " \t"; // Use spaces and tabs as delimeters
 // Prototypes
 void run_shell(FILE *batch_file);
 FILE *set_input_stream(FILE *batch_file);
+void handle_sigint(int sig);
 
 
 /*
