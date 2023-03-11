@@ -1,3 +1,4 @@
+#include <signal.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -43,6 +44,8 @@ void run_shell(FILE *batch_file) {
     char **tokens;
     int background_mode, num_internal_commands;
     FILE *input_stream;
+
+    signal(SIGINT, handle_sigint);
 
     // Input stream is stdin if batchfile is not provided, otherwise is batchfile
     num_internal_commands = array_len(internal_commands);
@@ -117,4 +120,12 @@ FILE *set_input_stream(FILE *batch_file) {
         input_stream = batch_file;
     }
     return input_stream;
+}
+
+
+/*
+ * Signal interrupt handler
+ */
+void handle_sigint(int sig) {
+    run_shell(NULL);
 }
