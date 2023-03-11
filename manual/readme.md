@@ -56,9 +56,7 @@ www.ibm.com. (n.d.). Environment variables. [online] Available at: https://www.i
 linux.die.net. (n.d.). Linux man pages. [online] Available at: https://linux.die.net/man/ [Accessed 11 Mar. 2023].
 Brennan, S. (2015). Tutorial - Write a Shell in C - Stephen Brennan. [online] Stephen Brennan’s Blog. Available at: https://brennan.io/2015/01/16/write-a-shell-in-c/ [Accessed 11 Mar. 2023].
 
-
-
-
+## ACKNOWLEDGEMENT OF THE DCU ACADEMIC INTEGRITY POLICY
 Author: Luigi Di Paolo
 Student number: 21725939
 
