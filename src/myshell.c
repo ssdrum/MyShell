@@ -72,6 +72,7 @@ void run_shell(FILE *batch_file) {
         if (fgets(buf, MAX_BUFFER, input_stream)) {
             // Prints input if coming from a batch file
             if (batch_file != NULL) {
+                fputs("> ", stdout);
                 fputs(buf, stdout);
             }
 
