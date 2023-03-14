@@ -40,7 +40,7 @@ void handle_sigint(int sig);
 
 
 /*
- * Main function. Calls run_shell passing the batch file to it as argument
+ * Main function. Calls run_shell passing the batch file to it as argument.
  */
 int main(int argc, char *argv[]) {
     FILE *batch_file = NULL;

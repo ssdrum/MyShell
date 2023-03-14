@@ -178,7 +178,7 @@ void internal_clr() {
 
 
 /*
- * Opens manual
+ * Opens manual. Assumes myshell is launched from the bin directory
  */
 void internal_help() {
     system("more -d ../manual/readme.md");
