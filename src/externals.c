@@ -25,12 +25,13 @@
 #include <sys/wait.h>
 #include "myshell.h"
 
-
-pid_t pid; // Keeps track of the pid. Is global so that it can be passed to the signal handler functiono below
+// Keeps track of the pid. Is global so that it can be passed to the signal 
+// handler function below
+pid_t pid;
 
 
 /**
- * char **tokens: Array strings
+ * char **tokens: NULL terminated array of char*
  * Redirects stdin and stdout if necessary
  */
 void assign_streams(char **tokens) {

@@ -96,26 +96,37 @@ void handle_intern_cmd(void (*command)(char**), char **tokens) {
 
 
 /*
- * char **tokens: Null terminated array of char*
+ * char **tokens: NULL terminated array of char*
  * Changes directory. Sets environment variable PWD accordingly.
  */
 void internal_cd(char **args) {
-    char cwd[MAX_BUFFER], nwd[MAX_BUFFER]; // Current and new working directory
+    char buffer[MAX_BUFFER]; // new working directory
     int is_changed;
     int num_tokens;
 
     num_tokens = array_len(args);
-    if (num_tokens == 2) { // path was entered as argument
-        strncpy(nwd, args[1], MAX_BUFFER); // Copies path passed as argument to nwd
-        is_changed = chdir(nwd);
-        if (is_changed == 0) { // chdir returns 0 if no error occurred
-            getcwd(cwd, sizeof(cwd)); // Changes directory to the path in cwd
-            setenv("PWD", cwd, 1); // Sets PWD environment variable to cwd
+    // Change cwd to home
+    if (num_tokens == 1) {
+        strncpy(buffer, getenv("HOME"), MAX_BUFFER);
+        chdir(buffer);
+        setenv("PWD", buffer, 1);
+    // Path was entered as argument
+    } else if (num_tokens == 2) {
+        // Copies path passed as argument to nwd
+        strncpy(buffer, args[1], MAX_BUFFER);
+        is_changed = chdir(buffer);
+         
+        // chdir returns 0 if no error occurred
+        if (is_changed == 0) {
+            getcwd(buffer, sizeof(buffer));
+            setenv("PWD", buffer, 1);
         } else {
-            fputs("path does not exist\n", stdout); // Invalid path entered
+            // Invalid path entered
+            fprintf(stdout, "path does not exist\n");
         }
-    } else if (num_tokens > 2) {
-        fputs("cd: too many arguments\n", stdout); // Too many arguments passed to cd
+    } else {
+        // Too many arguments
+        fprintf(stdout, "cd: too many arguments\n");
     }
 }
 
@@ -134,7 +145,8 @@ void internal_environ() {
 
 /*
  * char **tokens: NULL terminated array of char*
- * Implementation of echo commmand. Substitutes multiple spaces or tabs with a single space.
+ * Implementation of echo commmand. Substitutes multiple spaces or tabs with a
+ * single space.
  */
 void internal_echo(char **tokens) {
     int i = 1;
@@ -152,20 +164,22 @@ void internal_pause() {
     struct termios config;
 
     if(tcgetattr(STDIN_FILENO, &config) < 0) {
-        fprintf(stdout, "Error\n");
+        fprintf(stdout, "cannot find termios config\n");
+        return;
     }
 
     fprintf(stdout, "Shell is paused. Press Enter to resume\n");
-    // Disable echo keyboard input
+    // Disables echo of keyboard input
     config.c_lflag &= ~(ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &config);
 
+    // Takes user input until enter is pressed
     char c;
     while(c != '\n') {
         c = fgetc(stdin);
     }
 
-    // Re-enable echo keyboard input
+    // Re-enables echo of keyboard input
     config.c_lflag |= (ICANON | ECHO);
     tcsetattr(STDIN_FILENO, TCSANOW, &config);
 }

@@ -73,7 +73,8 @@ int array_len(char **arr) {
 
 /**
  * args: NULL terminated array of char*
- * Returns the index of the last token in args that is not equal to >, < or >>.
+ * Returns the index of the last token in args that is not equal to >, <, >> or
+ * &.
  * If no matching token is found, returns the number or tokens in args.
  */
 int get_last_arg(char **args) {
@@ -89,9 +90,8 @@ int get_last_arg(char **args) {
 
 /**
  * args: NULL terminated array of char*
- * end: index of args
- * Returns a copy of arr with everything after position pos removed. Adds a NULL
- * pointer as last entry
+ * end: index in args
+ * Generates a NULL terminated array with everything from position end removed.
  */
 char **trim_arr(char **arr, int end) {
     char **trimmed_arr = malloc(sizeof(char *) * end + 1);
