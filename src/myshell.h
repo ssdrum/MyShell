@@ -22,11 +22,13 @@
  */
 
 #include <stdio.h>
+#include <termios.h>
 
 #define MAX_BUFFER 1024
 #define MAX_ARGS 64
 #define PROMPT "$"
 
+extern struct termios config;
 
 // Internal commands arrays
 extern char *internal_commands[];

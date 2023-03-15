@@ -26,6 +26,7 @@
 #include <sys/fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <termios.h>
 #include "myshell.h"
 
 
@@ -154,10 +155,25 @@ void internal_echo(char **tokens) {
  * Pauses shell until enter is pressed
  */
 void internal_pause() {
+    struct termios config;
+
+    if(tcgetattr(STDIN_FILENO, &config) < 0) {
+        fprintf(stdout, "Error\n");
+    }
+
+    fprintf(stdout, "Shell is paused. Press Enter to resume\n");
+    // Disable echo keyboard input
+    config.c_lflag &= ~(ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &config);
+
     char c;
     while(c != '\n') {
         c = fgetc(stdin);
     }
+
+    // Re-enable echo keyboard input
+    config.c_lflag |= (ICANON | ECHO);
+    tcsetattr(STDIN_FILENO, TCSANOW, &config);
 }
 
 
