@@ -2,6 +2,8 @@
 
 Author: Luigi Di Paolo
 
-Usage: cd in src, then run make. This will build an executable in bin. cd in
-bin, then type ./myshell to open the shell, or ./myshell [batchfile] to run
-shell in batch mode.
+Usage:
+1. cd src
+2. make
+3. cd ../bin
+4. ./myshell [batchfile]
