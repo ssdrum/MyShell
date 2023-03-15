@@ -2,7 +2,7 @@
 
 Author: Luigi Di Paolo
 
-Usage:
+## Usage:
 1. cd src
 2. make
 3. cd ../bin
