@@ -57,7 +57,7 @@ int main(int argc, char *argv[]) {
 /*
  * FILE *batch_file: File pointer to a batch file
  * Assigns environment variables, takes input, handles internals and external
- * commands.
+ * commands and sets batchfile flag.
  */
 void run_shell(FILE *batch_file) {
     char buf[MAX_BUFFER], cwd[MAX_BUFFER];
@@ -72,8 +72,8 @@ void run_shell(FILE *batch_file) {
     num_internal_commands = array_len(internal_commands);
     input_stream = set_input_stream(batch_file);
 
-    // Assigns absolute path of current working directory to cwd. Assumes that
-    // myshell is executed from bin
+    // Assigns absolute path of this shell to SHELL environment variable.
+    // Assumes that myshell is run from bin
     getcwd(cwd, sizeof(cwd));
     strcat(cwd, "/myshell");
     setenv("SHELL", cwd, 1);
@@ -84,7 +84,8 @@ void run_shell(FILE *batch_file) {
         background_mode = 0;
         getcwd(cwd, sizeof(cwd)); 
 
-        // Prints current working directory and prompt
+        // Prints current working directory and prompt if no batchfile is 
+        // provided.
         if (batch_file == NULL) {
             fprintf(stdout, "%s %s ", cwd, PROMPT);
         }

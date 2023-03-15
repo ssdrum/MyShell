@@ -31,8 +31,6 @@
 #define MAX_ARGS 64
 #define PROMPT "$"
 
-extern struct termios config;
-
 // Internal commands arrays
 extern char *internal_commands[];
 extern void (*internal_function[])(char **args);
@@ -47,4 +45,4 @@ char **trim_arr(char **arr, int end);
 char **split(char *str, char *delim);
 
 // Fork/exec handling
-void handle_ext_cmd(char **tokens, int bg_mode);
+void handle_ext_cmd(char **tokens, int background_mode);

@@ -96,7 +96,7 @@ void handle_intern_cmd(void (*command)(char**), char **tokens) {
 
 
 /*
- * char **tokens: array of tokens
+ * char **tokens: Null terminated array of char*
  * Changes directory. Sets environment variable PWD accordingly.
  */
 void internal_cd(char **args) {
@@ -121,7 +121,7 @@ void internal_cd(char **args) {
 
 
 /*
- * Prints all environmental variables
+ * Prints all environmental variables to the standard output
  */
 void internal_environ() {
     extern char **environ;
@@ -133,7 +133,7 @@ void internal_environ() {
 
 
 /*
- * char **tokens: array of tokens
+ * char **tokens: NULL terminated array of char*
  * Implementation of echo commmand. Substitutes multiple spaces or tabs with a single space.
  */
 void internal_echo(char **tokens) {
@@ -203,9 +203,11 @@ void internal_quit() {
 }
 
 
-// Array of all internal commands names
-// Note that the order of internal_commands must match the order in
-// internal_funciton
+/*
+ * Array of all internal commands names
+ * Note that the order of internal_commands must match the order in
+ * internal_funciton
+*/
 char *internal_commands[] = {
     "cd",
     "clr",
@@ -219,7 +221,9 @@ char *internal_commands[] = {
 };
 
 
-// Array of pointers to internal commands functions
+/*
+ * Array of pointers to internal commands functions
+ */
 void (*internal_function[])(char **args) = {
     &internal_cd,
     &internal_clr,

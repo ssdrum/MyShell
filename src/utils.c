@@ -25,10 +25,11 @@
 
 
 /*
- * char *str: string
- * char *delim: string
- * Splits str on the characters specified by DELIM. Returns a NULL terminated
- * array of the substrings.
+ * char *str: A char* to be splitted
+ * char *delim: char* containing the characters used to split str
+ * Splits str on the characters specified by delim. Returns a NULL terminated
+ * array of the substrings. If str contains more tokens than MAX_ARGS, returns
+ * an array with only one NULL element.
  */
 char **split(char *str, char *delim) {
     // Avoids bus error
@@ -58,7 +59,7 @@ char **split(char *str, char *delim) {
 
 
 /*
- * arr: NULL terminated array
+ * arr: NULL terminated array of char*
  * Returns number of elements in arr
  */
 int array_len(char **arr) {
@@ -71,7 +72,7 @@ int array_len(char **arr) {
 
 
 /**
- * args: array of pointers
+ * args: NULL terminated array of char*
  * Returns the index of the last token in args that is not equal to >, < or >>.
  * If no matching token is found, returns the number or tokens in args.
  */
@@ -87,9 +88,9 @@ int get_last_arg(char **args) {
 
 
 /**
- * args: array of strings
- * pos: index of args
- * Makes a copy of arr with everything after position pos removed. Adds a NULL
+ * args: NULL terminated array of char*
+ * end: index of args
+ * Returns a copy of arr with everything after position pos removed. Adds a NULL
  * pointer as last entry
  */
 char **trim_arr(char **arr, int end) {

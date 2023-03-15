@@ -71,8 +71,8 @@ void handle_child(int sig) {
 
 
 /*
- * char **tokens: Array strings
- * int bg: Background execution flag
+ * char **tokens: NULL terminated array of char*
+ * int background_mode: Background execution flag - 0 for false, 1 for true
  * Handles forking and execution of non-internal commands. Creates a child
  * process which executes the command passed in tokens[0]. Also, reassigns
  * I/O file descriptors if the user is redirecting them.
