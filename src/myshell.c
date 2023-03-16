@@ -21,6 +21,7 @@
  * documentation. 
  */
 
+#include <limits.h>
 #include <signal.h>
 #include "myshell.h"
 
@@ -40,6 +41,11 @@ void handle_sigint(int sig);
  */
 int main(int argc, char *argv[]) {
     FILE *batch_file = NULL;
+
+    // Sets shell environment variable
+    char shellpath[PATH_MAX];
+    realpath(argv[0], shellpath);
+    setenv("shell", shellpath, 1);
 
     if (argc == 2) {
         batch_file = fopen(argv[1], "r");
@@ -65,18 +71,13 @@ void run_shell(FILE *batch_file) {
     int background_mode, num_internal_commands;
     FILE *input_stream;
 
+
     // Handles sigint
     signal(SIGINT, handle_sigint);
 
     // Input stream is stdin if batchfile is not provided, otherwise is batchfile
     num_internal_commands = array_len(internal_commands);
     input_stream = set_input_stream(batch_file);
-
-    // Assigns absolute path of this shell to SHELL environment variable.
-    // Assumes that myshell is run from bin
-    getcwd(cwd, sizeof(cwd));
-    strcat(cwd, "/myshell");
-    setenv("SHELL", cwd, 1);
 
     // Main loop that takes input
     while(!feof(input_stream)) {
