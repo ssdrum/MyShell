@@ -21,6 +21,7 @@
  * documentation. 
  */
 
+#include <stdlib.h>
 #include <string.h>
 #include <sys/fcntl.h>
 #include <termios.h>
@@ -221,7 +222,10 @@ void internal_help() {
     // Appends manual path
     strcat(man_path, "/manual/readme.md");
 
-    snprintf(buf, sizeof(buf), "more -d %s", man_path);                                   
+    if (snprintf(buf, sizeof(buf), "more -d %s", man_path) < 0) {
+        fprintf(stdout, "error");
+        exit(EXIT_FAILURE);
+    }
     system(buf);
 }
 
