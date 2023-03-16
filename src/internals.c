@@ -21,6 +21,7 @@
  * documentation. 
  */
 
+#include <string.h>
 #include <sys/fcntl.h>
 #include <termios.h>
 #include "myshell.h"
@@ -202,10 +203,25 @@ void internal_clr() {
 
 
 /*
- * Opens manual. Assumes myshell is launched from the bin directory
+ * Opens manual using more.
  */
 void internal_help() {
-    system("more -d ../manual/readme.md");
+    char man_path[MAX_BUFFER];
+    char buffer[MAX_BUFFER];
+
+    strcpy(man_path, getenv("shell"));
+
+    int i = 0;
+    while (man_path[i] != '\0') {
+        i++;
+    }
+
+    man_path[i - 11] = '\0';
+    printf("%s\n", man_path);
+
+    strcat(man_path, "/manual/readme.md");
+    snprintf(buffer, sizeof(buffer), "more -d %s", man_path);                                   
+    system(buffer);
 }
 
 

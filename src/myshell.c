@@ -21,7 +21,6 @@
  * documentation. 
  */
 
-#include <limits.h>
 #include <signal.h>
 #include "myshell.h"
 
@@ -43,9 +42,9 @@ int main(int argc, char *argv[]) {
     FILE *batch_file = NULL;
 
     // Sets shell environment variable
-    char shellpath[PATH_MAX];
-    realpath(argv[0], shellpath);
-    setenv("shell", shellpath, 1);
+    char shell_path[MAX_BUFFER];
+    realpath(argv[0], shell_path);
+    setenv("shell", shell_path, 1);
 
     if (argc == 2) {
         batch_file = fopen(argv[1], "r");
