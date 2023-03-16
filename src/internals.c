@@ -203,25 +203,26 @@ void internal_clr() {
 
 
 /*
- * Opens manual using more.
+ * Opens manual using more
  */
 void internal_help() {
     char man_path[MAX_BUFFER];
-    char buffer[MAX_BUFFER];
+    char buf[MAX_BUFFER];
 
     strcpy(man_path, getenv("shell"));
 
+    // Finds length of man_path
     int i = 0;
     while (man_path[i] != '\0') {
         i++;
     }
-
+    // Removes /bin/myshell from man_path
     man_path[i - 11] = '\0';
-    printf("%s\n", man_path);
-
+    // Appends manual path
     strcat(man_path, "/manual/readme.md");
-    snprintf(buffer, sizeof(buffer), "more -d %s", man_path);                                   
-    system(buffer);
+
+    snprintf(buf, sizeof(buf), "more -d %s", man_path);                                   
+    system(buf);
 }
 
 

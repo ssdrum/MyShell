@@ -27,7 +27,7 @@
 #include <string.h>
 
 
-#define MAX_BUFFER 1024
+#define MAX_BUFFER 2048
 #define MAX_ARGS 64
 #define PROMPT "$"
 
