@@ -50,7 +50,7 @@ int main(int argc, char *argv[]) {
         batch_file = fopen(argv[1], "r");
         // Batch file does not exist
         if (batch_file == NULL) {
-            fprintf(stdout, "cannot open %s\n", argv[1]);
+            fprintf(stderr, "cannot open %s\n", argv[1]);
             exit(EXIT_FAILURE);
         } 
     }
