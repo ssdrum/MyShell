@@ -38,7 +38,7 @@ int redirect_stdout(char *filename, int append) {
     int fd = open(filename, O_CREAT | O_WRONLY | (append ? O_APPEND : 0), 0666);
     if (fd < 0) {
         // Error
-        fprintf(stdout, "cannot open file: %s", filename);
+        fprintf(stderr, "cannot open file: %s", filename);
     }
     // Allocates new file descriptor that refers to new stdout
     int new_out = dup(1);
@@ -124,11 +124,11 @@ void internal_cd(char **args) {
             setenv("PWD", buffer, 1);
         } else {
             // Invalid path entered
-            fprintf(stdout, "path does not exist\n");
+            fprintf(stderr, "path does not exist\n");
         }
     } else {
         // Too many arguments
-        fprintf(stdout, "cd: too many arguments\n");
+        fprintf(stderr, "cd: too many arguments\n");
     }
 }
 
@@ -166,7 +166,7 @@ void internal_pause() {
     struct termios config;
 
     if(tcgetattr(STDIN_FILENO, &config) < 0) {
-        fprintf(stdout, "cannot find termios config\n");
+        fprintf(stderr, "cannot find termios config\n");
         return;
     }
 
@@ -223,7 +223,7 @@ void internal_help() {
     strcat(man_path, "/manual/readme.md");
 
     if (snprintf(buf, sizeof(buf), "more -d %s", man_path) < 0) {
-        fprintf(stdout, "error");
+        fprintf(stderr, "error");
         exit(EXIT_FAILURE);
     }
     system(buf);
