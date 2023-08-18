@@ -7,3 +7,5 @@ Author: Luigi Di Paolo
 2. make
 3. cd ../bin
 4. ./myshell [batchfile]
+
+See manual for more info
